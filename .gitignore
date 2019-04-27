@@ -1,5 +1,5 @@
+/.idea
 *.idea
-*.logs
-*.out
+/logs
+/out
 *.iml
-*.gitnore
