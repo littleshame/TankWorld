@@ -21,10 +21,10 @@ public class ImageUtil {
 
     private static final String[] heroImagePaths =
             {
-                    "images/tank/h_u.gif",
-                    "images/tank/h_d.gif",
-                    "images/tank/h_l.gif",
-                    "images/tank/h_r.gif",
+                    "images/tank/hero_up.gif",
+                    "images/tank/hero_down.gif",
+                    "images/tank/hero_left.gif",
+                    "images/tank/hero_right.gif",
                     "images/tank/e_1_u.gif",
                     "images/tank/e_1_d.gif",
                     "images/tank/e_1_l.gif",
@@ -32,16 +32,32 @@ public class ImageUtil {
             };
 
     private static final String[] bulletImagePaths = {
-            "images/bullet/u.gif",
-            "images/bullet/d.gif",
-            "images/bullet/l.gif",
-            "images/bullet/r.gif",
+            "images/bullet/bullet_up.png",
+            "images/bullet/bullet_down.png",
+            "images/bullet/bullet_left.png",
+            "images/bullet/bullet_right.png",
 
+    };
+
+    private static final String[] wallImagePaths = {
+            "images/wall/normal.gif",
+    };
+
+    private static final String[] blastImagePaths = {
+            "images/blast/tank_1.gif",
+            "images/blast/tank_2.gif",
+            "images/blast/tank_3.gif",
+            "images/blast/tank_4.gif",
+            "images/blast/tank_5.gif",
+            "images/blast/tank_6.gif",
+            "images/blast/tank_7.gif",
+            "images/blast/tank_8.gif",
     };
 
     public static final Image[] heroImages = ImageUtil.readImg(heroImagePaths);
     public static final Image[] bulletImages = ImageUtil.readImg(bulletImagePaths);
-
+    public static final Image[] wallImages = ImageUtil.readImg(wallImagePaths);
+    public static final Image[] blastImages = ImageUtil.readImg(blastImagePaths);
 
     public static Image[] readImg(String[] paths) {
         log.info("开始加载模型图片资源....");
@@ -51,5 +67,11 @@ public class ImageUtil {
             res[i] = tk.getImage(ImageUtil.class.getClassLoader().getResource(paths[i]));
         }
         return res;
+    }
+
+    public static void loadAllImgs(Graphics g){
+        for (int i = 0; i < blastImages.length; i++) {
+            g.drawImage(blastImages[i],Integer.MAX_VALUE,Integer.MAX_VALUE,null);
+        }
     }
 }
