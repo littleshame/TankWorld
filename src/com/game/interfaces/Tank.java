@@ -12,16 +12,12 @@ import java.awt.*;
  */
 public abstract class Tank{
 
-    /**
-     * 射出去的子弹没了
-     * @param bullet
-     */
-    public abstract void runout(Bullet bullet);
-
-    public abstract void drawBullets(Graphics g);
-
     public abstract void draw(Graphics g);
 
+    /**
+     * 外接矩形
+     * @return
+     */
     public abstract Rectangle getRec();
 
     /**
@@ -29,4 +25,7 @@ public abstract class Tank{
      * @param attack
      */
     public abstract void hurt(int attack);
+
+
+    public abstract void removeBullet(Bullet bullet);
 }

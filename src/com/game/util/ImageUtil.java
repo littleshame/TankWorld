@@ -43,7 +43,7 @@ public class ImageUtil {
             "images/wall/normal.gif",
     };
 
-    private static final String[] blastImagePaths = {
+    private static final String[] tankBlastImagePaths = {
             "images/blast/tank_1.gif",
             "images/blast/tank_2.gif",
             "images/blast/tank_3.gif",
@@ -54,10 +54,21 @@ public class ImageUtil {
             "images/blast/tank_8.gif",
     };
 
+    private static final String[] bulletBlastImagePaths = {
+            "images/blast/bullet_1.png",
+            "images/blast/bullet_2.png",
+            "images/blast/bullet_3.png",
+            "images/blast/bullet_4.png",
+            "images/blast/bullet_5.png",
+            "images/blast/bullet_6.png",
+    };
+
+
     public static final Image[] heroImages = ImageUtil.readImg(heroImagePaths);
     public static final Image[] bulletImages = ImageUtil.readImg(bulletImagePaths);
     public static final Image[] wallImages = ImageUtil.readImg(wallImagePaths);
-    public static final Image[] blastImages = ImageUtil.readImg(blastImagePaths);
+    public static final Image[] tankBlastImages = ImageUtil.readImg(tankBlastImagePaths);
+    public static final Image[] bulletBlastImages = ImageUtil.readImg(bulletBlastImagePaths);
 
     public static Image[] readImg(String[] paths) {
         log.info("开始加载模型图片资源....");
@@ -70,8 +81,15 @@ public class ImageUtil {
     }
 
     public static void loadAllImgs(Graphics g){
-        for (int i = 0; i < blastImages.length; i++) {
-            g.drawImage(blastImages[i],Integer.MAX_VALUE,Integer.MAX_VALUE,null);
+        for (int i = 0; i < tankBlastImages.length; i++) {
+            g.drawImage(tankBlastImages[i],Integer.MAX_VALUE,Integer.MAX_VALUE,null);
         }
+        for (int i = 0; i < bulletImages.length; i++) {
+            g.drawImage(bulletImages[i],Integer.MAX_VALUE,Integer.MAX_VALUE,null);
+        }
+        for (int i = 0; i < bulletBlastImages.length; i++) {
+            g.drawImage(bulletBlastImages[i],Integer.MAX_VALUE,Integer.MAX_VALUE,null);
+        }
+
     }
 }

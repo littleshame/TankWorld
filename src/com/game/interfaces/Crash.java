@@ -6,7 +6,7 @@ import java.awt.*;
  * @author: tjc
  * @Date: 2019-5-3
  */
-public interface TouchAble {
+public interface Crash {
 
     /**
      * 返回外接矩型
@@ -20,4 +20,6 @@ public interface TouchAble {
      * @return
      */
     boolean crash(Rectangle rect);
+
+
 }

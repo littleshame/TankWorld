@@ -17,6 +17,10 @@ public class Wall {
     private static final int SIZE_X = 30;
     private static final int SIZE_Y = 30;
 
+
+
+
+
     public Rectangle getRec() {
         return new Rectangle(localX, localY, SIZE_X, SIZE_Y);
     }

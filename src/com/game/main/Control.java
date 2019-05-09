@@ -1,11 +1,9 @@
 package com.game.main;
 
+import com.game.interfaces.Blast;
 import com.game.interfaces.Tank;
-import com.game.model.Bullet;
-import com.game.model.Hero;
-import com.game.model.Enemy;
+import com.game.model.*;
 import com.game.global.Const;
-import com.game.model.Wall;
 import com.game.util.ImageUtil;
 
 import javax.swing.*;
@@ -27,9 +25,13 @@ public class Control extends JComponent {
 
     private boolean load = false;
 
-    public List<Tank> tankList = new LinkedList<>();
+    public List<Tank> tankList = new LinkedList();
 
-    public List<Wall> wallList = new LinkedList<>();
+    public List<Wall> wallList = new LinkedList();
+
+    public List<Bullet> bulletList = new LinkedList();
+
+    public List<Blast> blastList = new LinkedList();
 
     public Control() {
         onLoad();
@@ -37,24 +39,50 @@ public class Control extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
-        if(!load) {
+        if (!load) {
             ImageUtil.loadAllImgs(g);
             load = true;
         }
         for (int i = 0; i < tankList.size(); i++) {
             Tank tank = tankList.get(i);
             tank.draw(g);
-            tank.drawBullets(g);
         }
         for (int i = 0; i < wallList.size(); i++) {
             wallList.get(i).draw(g);
         }
+        for (int i = 0; i < bulletList.size(); i++) {
+            Bullet bullet = bulletList.get(i);
+            bullet.hit(getTankList(), getWallList(), getBulletList());
+            bullet.draw(g);
+        }
+        for (Blast b : blastList) {
+            b.draw(g);
+        }
+    }
+
+    public void removeBullet(Bullet bullet) {
+        System.out.println("remove");
+        bulletList.remove(bullet);
+    }
+
+    public void addBlast() {
+
+    }
+
+    public void removeBlast(Blast blast) {
+        blastList.remove(blast);
+    }
+
+    public List<Bullet> getBulletList() {
+        return bulletList;
     }
 
     /**
      * 刷新图像线程
      */
     private class PaintThread extends Thread {
+        private List<Bullet> bulletList;
+
         @Override
         public void run() {
             while (true) {
@@ -96,5 +124,13 @@ public class Control extends JComponent {
 
     public List<Wall> getWallList() {
         return wallList;
+    }
+
+    public void addBullet(Bullet bullet) {
+        bulletList.add(bullet);
+    }
+
+    public void addBlast(Blast blast) {
+        blastList.add(blast);
     }
 }

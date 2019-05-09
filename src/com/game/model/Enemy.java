@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by tjc on 2019-3-15.
  *
- * @auther: tjc
+ * @author: tjc
  * @Date: 2019-3-15
  */
 public class Enemy extends Tank {
@@ -26,16 +26,13 @@ public class Enemy extends Tank {
     private int health = 1;
     private boolean die = false;
 
-    private boolean blasting = false;
-    private int blastStep = 8;
-
     private boolean keepMove = false;
     private int shootCmd = 0;
-    private Control tc = null;
+    private Control ct = null;
 
     private int MAX_bullet_NUM = 1;
 
-    private List<Bullet> bulletList = new LinkedList();
+    private List<Bullet> shotBullets = new LinkedList();
 
     /**
      *
@@ -61,18 +58,6 @@ public class Enemy extends Tank {
         }
     }
 
-    @Override
-    public void runout(Bullet bullet) {
-        bulletList.remove(bullet);
-    }
-
-    @Override
-    public void drawBullets(Graphics g) {
-        for (int i = 0; i < bulletList.size(); i++) {
-            bulletList.get(i).draw(g);
-        }
-    }
-
     /**
      * 坦克移动线程
      */
@@ -95,7 +80,7 @@ public class Enemy extends Tank {
         @Override
         public void run() {
             while (true) {
-                if (shootCmd > 0 && bulletList.size() < MAX_bullet_NUM) {
+                if (shootCmd > 0 && shotBullets.size() < MAX_bullet_NUM) {
                     shoot();
                 }
                 try {
@@ -111,36 +96,33 @@ public class Enemy extends Tank {
         Bullet bullet = null;
         switch (direction) {
             case Const.DIRECTION_UP:
-                bullet = new Bullet(localX + SIZE_X / 2, localY, direction, this);
+                bullet = new Bullet(localX + SIZE_X / 2, localY, direction, this, ct);
                 break;
             case Const.DIRECTION_DOWN:
-                bullet = new Bullet(localX + SIZE_X / 2, localY + SIZE_Y, direction, this);
+                bullet = new Bullet(localX + SIZE_X / 2, localY + SIZE_Y, direction, this, ct);
                 break;
             case Const.DIRECTION_LEFT:
-                bullet = new Bullet(localX, localY + SIZE_Y / 2, direction, this);
+                bullet = new Bullet(localX, localY + SIZE_Y / 2, direction, this, ct);
                 break;
             case Const.DIRECTION_RIGHT:
-                bullet = new Bullet(localX + SIZE_X, localY + SIZE_Y / 2, direction, this);
+                bullet = new Bullet(localX + SIZE_X, localY + SIZE_Y / 2, direction, this, ct);
                 break;
             default:
         }
-        bulletList.add(bullet);
+        ct.addBullet(bullet);
+        shotBullets.add(bullet);
         shootCmd--;
     }
 
     @Override
     public void draw(Graphics g) {
         if (isDie()) {
-            if(blastStep <= 0) {
-                tc.getTankList().remove(this);
-                return;
-            }
-            paintBlast(g);
+            ct.getTankList().remove(this);
             return;
         }
         switch (this.direction) {
             case Const.DIRECTION_UP:
-                g.drawImage(ImageUtil.blastImages[0], localX, localY, SIZE_X, SIZE_Y, null);
+                g.drawImage(ImageUtil.tankBlastImages[0], localX, localY, SIZE_X, SIZE_Y, null);
                 break;
             case Const.DIRECTION_DOWN:
                 g.drawImage(ImageUtil.heroImages[1], localX, localY, SIZE_X, SIZE_Y, null);
@@ -168,38 +150,33 @@ public class Enemy extends Tank {
         }
     }
 
-    private void die() {
-        die = true;
-        blasting = true;
+    @Override
+    public void removeBullet(Bullet bullet) {
+        shotBullets.remove(bullet);
     }
 
-    /**
-     * 死亡时爆炸
-     */
-    private void paintBlast(Graphics g) {
-        if (blastStep <= 0) {
-            return;
-        }
-        g.drawImage(ImageUtil.blastImages[--blastStep], localX, localY, SIZE_X, SIZE_Y, null);
+
+    private void die() {
+        die = true;
+        ct.addBlast(new TankBlast(localX + SIZE_X / 2, localY + SIZE_Y / 2,ct));
     }
 
     public List<Bullet> getBulletList() {
-        return bulletList;
+        return shotBullets;
     }
 
     public boolean isDie() {
         return die;
     }
 
-    public Enemy(int localX, int localY, int direction,Control tc) {
+    public Enemy(int localX, int localY, int direction, Control ct) {
         this.localX = localX;
         this.localY = localY;
         this.direction = direction;
-        this.tc = tc;
+        this.ct = ct;
         new stepThread().start();
         new shootThread().start();
     }
-
 
 
 }
